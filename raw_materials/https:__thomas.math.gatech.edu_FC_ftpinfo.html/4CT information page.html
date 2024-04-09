@@ -1,0 +1,80 @@
+<html data-lt-installed="true"><link type="text/css" rel="stylesheet" id="dark-mode-custom-link"><link type="text/css" rel="stylesheet" id="dark-mode-general-link"><style lang="en" type="text/css" id="dark-mode-custom-style"></style><style lang="en" type="text/css" id="dark-mode-native-style"></style><style lang="en" type="text/css" id="dark-mode-native-sheet"></style><head>
+<meta http-equiv="content-type" content="text/html; charset=windows-1252"><title>
+4CT information page
+</title>
+<meta id="Reverso_extension___elForCheckedInstallExtension" name="Reverso extension" content="2.2.205"></head><body>This is a guide to the material contained in 
+<a href="http://people.math.gatech.edu/~thomas/OLDFTP/four/">
+http://people.math.gatech.edu/~thomas/OLDFTP/four/</a>,
+an exact copy of the files formerly located on a now defunct
+anonymous ftp server.
+It falls naturally into two parts, Reducibility and Discharging.
+Common to both parts is the file
+ <a href="http://people.math.gatech.edu/~thomas/OLDFTP/four/unavoidable.conf">
+unavoidable.conf</a>, a list of the 633 unavoidable configurations
+stored in the following format:<ul>
+	<li> N; a character string identifying the configuration;
+	</li><li> n r  a b; where <ul>
+		<li> n is the number of vertices of the free completion;
+		</li><li> r is the ring-size;
+		</li><li> a is the cardinality of <i> C </i>; and
+		</li><li> b is the cardinality of <i> C' </i> (see discussion
+				before (3.2) in the paper); </li></ul>
+	</li><li> k [2*k integers]; k is the number of edges in X, each edge being
+		represented as a pair of integers;
+	</li><li> the adjacency list of the free completion in a standard form
+(the second column contains
+			the degrees in the free completion);  
+</li><li> coordinates of vertices of the free completion; 
+	 the i-th entry in the coordinate list is <i> 1024 x + y </i> where <i> [x,y] </i> are the coordinates
+                of vertex <i> i, (0 &lt; = x,y &lt; 1024) </i>. 
+</li></ul> 
+Vertices <i> 1,...,r </i> are the ring vertices (in order),
+                and so the configuration itself consists of vertices <i> r + 1,
+r + 2, ... n </i>.
+	The set is also available in a 
+	<a href="http://people.math.gatech.edu/~thomas/OLDFTP/fcdir/unavoidable.ps.gz">
+pictorial version</a>.
+	
+<p></p><h2> Reducibility:</h2>
+<ul>
+<li> <a href="http://people.math.gatech.edu/~thomas/OLDFTP/four/unavoidable.conf">
+ unavoidable.conf</a>, described above.
+</li><li> <a href="http://people.math.gatech.edu/~thomas/OLDFTP/four/reduce.c">
+ reduce.c</a>, the program that verifies reducibility.
+</li><li> <a href="http://people.math.gatech.edu/~thomas/OLDFTP/fcdir/reduce.ps">
+ reduce.tex</a>, documentation for the above.
+</li></ul>
+All of the above are now available at 
+    <a href="http://arxiv.org/abs/1401.6481">arXiv:1401.6481</a>.
+<p></p><h2>Discharging:</h2>
+	<ul>
+<li> <a href="http://people.math.gatech.edu/~thomas/OLDFTP/four/unavoidable.conf">
+ unavoidable.conf</a>, described above.
+</li><li> <a href="http://people.math.gatech.edu/~thomas/OLDFTP/four/discharge.c">
+ discharge.c</a>, the program that verifies that the files
+<a href="http://people.math.gatech.edu/~thomas/OLDFTP/four/present7">
+ present7</a>, 
+<a href="http://people.math.gatech.edu/~thomas/OLDFTP/four/present8">
+ present8</a>,
+<a href="http://people.math.gatech.edu/~thomas/OLDFTP/four/present9">
+ present9</a>,
+<a href="http://people.math.gatech.edu/~thomas/OLDFTP/four/present10">
+ present10</a>, and
+<a href="http://people.math.gatech.edu/~thomas/OLDFTP/four/present11">
+ present11</a>
+describe correct unavoidability proofs.
+</li><li> <a href="http://people.math.gatech.edu/~thomas/OLDFTP/fcdir/discharge.ps">
+ discharge.tex</a>, documentation for the above program.
+</li><li> <a href="http://people.math.gatech.edu/~thomas/OLDFTP/four/rules">
+ rules</a>, the list of the discharging rules in a machine readable form.
+They are also available in 
+<a href="http://people.math.gatech.edu/~thomas/FC/fourcolor.html#PicRules">
+human-readable form</a>.
+</li><li> <a href="http://people.math.gatech.edu/~thomas/OLDFTP/four/discharge.pas">
+ discharge.pas</a>, a Pascal version of the discharging program, written
+by <a href="http://math.la.asu.edu/%7Echeckman/">
+Christopher Carl Heckman</a>.
+</li></ul>
+All of the above are now available at 
+  <a href="http://arxiv.org/abs/1401.6485">arXiv:1401.6485</a>.
+</body></html>

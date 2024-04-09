@@ -1,0 +1,339 @@
+<html data-lt-installed="true"><link type="text/css" rel="stylesheet" id="dark-mode-custom-link"><link type="text/css" rel="stylesheet" id="dark-mode-general-link"><style lang="en" type="text/css" id="dark-mode-custom-style"></style><style lang="en" type="text/css" id="dark-mode-native-style"></style><style lang="en" type="text/css" id="dark-mode-native-sheet"></style><head>
+<meta http-equiv="content-type" content="text/html; charset=windows-1252"><title>The Four Color Theorem</title><meta id="Reverso_extension___elForCheckedInstallExtension" name="Reverso extension" content="2.2.205"></head>
+
+<body>
+
+<h1> The Four Color Theorem</h1>
+
+<p> This page gives a brief summary of a new proof of the Four Color
+Theorem and a four-coloring algorithm found by 
+<a href="http://www.math.ohio-state.edu/~robertso">Neil Robertson</a>,
+<a href="http://www.math.ohio-state.edu/~dsanders">Daniel P. Sanders</a>, 
+Paul Seymour and 
+<a href="http://people.math.gatech.edu/~thomas/homepage.html"> Robin Thomas</a>.
+</p><p>
+
+</p><hr><img src="The%20Four%20Color%20Theorem_fichiers/usa.gif"><hr>
+
+<a name="0"><strong>Table of Contents:</strong></a><br><p>
+
+</p><ol>
+<li> <a href="#History"> History.</a>
+</li><li> <a href="#Why"> Why a new proof?</a>
+</li><li> <a href="#Outline"> Outline of the proof.</a>
+</li><li> <a href="#Main"> Main features of our proof.</a>
+</li><li> <a href="#Configurations"> Configurations.</a>
+</li><li> <a href="#Rules"> Discharging rules.</a>
+</li><li> <a href="#Pointers"> Pointers.</a>
+</li><li> <a href="#Algorithm"> A quadratic algorithm.</a>
+</li><li> <a href="#Discussion"> Discussion.</a>
+</li><li> <a href="#References"> References.</a>
+</li></ol>
+
+<p><a name="History"><strong>History.</strong></a></p><p>
+
+The Four Color Problem dates back to 1852 when Francis Guthrie,
+while trying to color the map of counties of England noticed that
+four colors sufficed. He asked his brother Frederick if it was true
+that <strong>any</strong> map can be colored using four colors in such
+a way that adjacent regions (i.e. those sharing a common boundary
+segment, not just a point) receive different colors. Frederick Guthrie then
+communicated the  conjecture to DeMorgan. The first printed reference 
+is due to Cayley in 1878.
+</p><p>
+A year later the first `proof' by Kempe appeared; its incorrectness was
+pointed out by Heawood 11 years later. Another failed proof is due to
+Tait in 1880; a gap in the argument was pointed out by Petersen in 1891.
+Both failed proofs did have some value, though. Kempe discovered what
+became known as Kempe chains, and Tait found an equivalent formulation
+of the Four Color Theorem in terms of 3-edge-coloring.
+</p><p>	
+The next major contribution came from Birkhoff
+whose work  allowed 
+Franklin in 1922 to prove that the four color conjecture
+is true for maps with at most 25 regions. It was also used
+by other mathematicians  to make various forms
+of progress on the four color problem. We should specifically mention
+Heesch who developed the two main ingredients needed for the ultimate
+proof - reducibility and discharging. While the concept of reducibility
+was studied by other researchers as well, it appears that the idea
+of discharging, crucial for the unavoidability part of the proof,
+is due to Heesch, and that it was he who conjectured that a suitable
+development of this method would solve the Four Color Problem.
+</p><p>
+This was confirmed by Appel and Haken in 1976, when they published
+their proof of the Four Color Theorem 
+<a href="#References"> [1,2]</a>.
+
+
+</p><p><a name="Why"><strong>Why a new proof?</strong></a></p><p>
+
+There are two reasons why the Appel-Haken proof is not completely
+satisfactory.
+</p><ul>
+<li>Part of the Appel-Haken proof uses a computer, and cannot be
+verified by hand, and
+</li><li>even the part that is supposedly hand-checkable is extraordinarily 
+complicated and tedious, and as far as we know, no one has verified it 
+in its entirety.
+</li></ul>
+We have in fact tried to verify the Appel-Haken proof, but soon gave up.
+Checking the computer part would not only require a lot of programming, 
+but also inputing the descriptions of 1476 graphs, and that was not even the 
+most controversial part of the proof.
+<p>
+We decided that it would be more profitable to work out our own proof.
+So we did and came up with a proof and an algorithm that are described below.
+
+</p><p><a name="Outline"><strong>Outline of the proof.</strong></a></p><p>
+
+The basic idea of the proof is the same as Appel and Haken's. We exhibit
+a set of 633 "configurations", and prove each of them is "reducible".
+This is a technical concept that implies that no configuration with this
+property can  appear in a minimal counterexample to the Four Color
+Theorem. It can also be used in an algorithm, for if a reducible configuration
+appears in a planar graph G, then one can construct in constant time
+a smaller planar graph G' such that any four-coloring of G' can be converted
+to a four-coloring of G in linear time.
+</p><p>
+It has been known since 1913 that every minimal counterexample to the
+Four Color Theorem is an internally 6-connected triangulation. In the
+second part of the proof we prove that at least one of our 633 configurations
+appears in every internally 6-connected planar
+triangulation (not necessarily a minimal counterexample to the 4CT).
+This is called proving unavoidability, and uses the "discharging method",
+first suggested by Heesch. Here our method differs from that 
+of Appel and Haken.
+
+</p><p><a name="Main"><strong>Main features of our proof.</strong></a></p><p>
+
+We confirm a conjecture of Heesch that in proving unavoidability, a reducible
+configuration can be found in the second neighborhood of an "overcharged"
+vertex; this is how we avoid "immersion" problems that were a major
+source of complication for Appel and Haken. Our unavoidable set has
+size 633 as opposed to the 1476 member set of Appel and Haken, and our
+discharging method uses only 32 discharging rules, instead of the 300+
+of Appel and Haken. Finally, we obtain a quadratic algorithm to four-color
+planar graphs (described later), an improvement over the quartic algorithm
+of Appel and Haken.
+
+</p><p><a name="Configurations"><strong>Configurations.</strong></a></p><p>
+
+A <strong>near-triangulation</strong> is a
+non-null connected loopless plane graph such that every finite
+region is a triangle.
+A <strong>configuration</strong> K consists of a near-triangulation G and a
+map g from V(G) to the integers with the following properties:
+</p><ol>
+<li>for every vertex v, G\v has at most two
+components, and if there are two, then the degree of v is g(v)-2,
+</li><li>for every vertex v, if v is not incident with the infinite
+region, then g(v) equals the degree of v, and otherwise g(v) is
+greater than the degree of v; and
+in either case g(v)&gt; 4,
+</li><li>K has ring-size at least 2, where the <strong>ring-size</strong> of K
+is defined to be the sum of g(v)-deg(v)-1, summed over all
+vertices v incident with the infinite region such that G\v is connected.
+</li></ol>
+ 
+<p> 
+When drawing pictures of configurations
+we use a convention introduced by Heesch. The shapes
+of vertices indicate the value of g(v) as follows:
+A solid black circle means g(v)=5, a dot (or what appears
+in the picture as no symbol at all) means g(v)=6, a hollow
+circle means g(v)=7, a hollow square means
+g(v)=8, a triangle means g(v)=9, and a pentagon
+means g(v)=10. (We do not need vertices v with g(v)&gt; 11,
+and only one vertex with g(v)=11, for which we do not use any
+special symbol.) In the picture below 17 of our 633 reducible configurations
+are displayed using the indicated convention. The whole set can be viewed
+by clicking 
+<a href="http://people.math.gatech.edu/~thomas/OLDFTP/fcdir/unavoidable.pdf">
+here</a>. (We refer to (3.2) of our paper 
+<a href="#References">[7]</a> for the meaning
+of "thick edges" and "half-edges" in those pictures.)
+</p><hr><img src="The%20Four%20Color%20Theorem_fichiers/confs.gif"><hr>
+
+ 
+Any configuration isomorphic to one of the
+<a href="http://people.math.gatech.edu/~thomas/OLDFTP/fcdir/unavoidable.pdf">
+633 configurations </a> exhibited in
+<a href="#References">[7]</a> is called a <strong>good</strong> configuration.
+Let T be a triangulation.  A configuration K=(G,g) <strong>appears</strong> 
+in T if
+G is an induced subgraph of T, every finite region of
+G is a region of T, and g(v) equals the degree of v in T for every vertex
+v of G.  We prove the following two statements.
+<p>
+<strong>THEOREM 1.</strong>  If T is a minimal counterexample to the
+Four Color Theorem, then no good configuration
+appears in T.
+</p><p>
+<strong>THEOREM 2.</strong> For every internally 6-connected triangulation T, some
+good configuration appears in T.
+</p><p>
+ 
+ From the above two theorems it follows that no minimal counterexample exists,
+and so the 4CT is true. The first proof needs a computer.  The second can
+be checked by hand in a few months, or, using a computer, it can be verified
+in about 20 minutes.
+
+</p><p><a name="Rules"><strong>Discharging rules.</strong></a></p><p>
+
+Let T be an internally 6-connected triangulation.
+Initially, every vertex v is assigned a charge of 10(6-deg(v)). It follows
+from Euler's formula that the sum of the charges of all vertices is 120;
+in particular, it is positive. We now redistribute the charges according
+to the following rules, as follows. Whenever  T has a subgraph
+isomorphic to one of the graphs in the figure below satisfying the degree
+specifications (for a vertex v of a rule with a minus sign next to v this means
+that the degree of the corresponding vertex of T is at most the value
+specified by the shape of v, and analogously for vertices with a plus
+sign next to them; equality is required for vertices with no sign next
+to them) a charge of one (two in case of the first rule) is to be sent
+along the edge marked with an arrow. 
+
+<a name="PicRules"></a></p><hr><a name="PicRules"><img src="The%20Four%20Color%20Theorem_fichiers/rules.gif"><hr></a>
+
+This procedure defines a new set
+of charges with the same total sum. Since the total sum is positive,
+there is a vertex v in T whose new charge is positive. We show that
+a good configuration appears in the second neighborhood of v.
+<p>
+If the degree of v is at most 6 or at least 12, then this can be seen
+fairly easily by a direct argument. For the remaining cases, however,
+the proofs are much more complicated. Therefore, we have written the
+proofs in a formal language so that they can be verified by a computer. 
+Each individual step of these proofs is 
+human-verifiable, but the proofs themselves are not really checkable
+by hand, because of their length.
+
+
+</p><p><a name="Pointers"><strong>Pointers.</strong></a></p><p>
+
+
+The theoretical part of our proof is described in 
+<a href="#References">[7]</a>. A 10-page
+<a href="http://people.math.gatech.edu/~thomas/OLDFTP/fcdir/npfc.pdf"> 
+survey</a> is available on-line.
+The computer data and programs used to be located on an anonymous
+ftp server, but that server has been phased out. The same files are
+now available from
+<a href="http://people.math.gatech.edu/~thomas/OLDFTP/four/">
+http://people.math.gatech.edu/~thomas/OLDFTP/four/</a> and can be 
+<a href="http://people.math.gatech.edu/~thomas/FC/ftpinfo.html">
+conveniently viewed</a>. An independent set of programs was written
+by <a href="http://www.fmf.uni-lj.si/~fijavz/">Gasper Fijavz</a>
+under the guidance of 
+<a href="http://www.fmf.uni-lj.si/~mohar/">Bojan Mohar</a>.
+
+</p><p><a name="Algorithm"><strong>A quadratic algorithm.</strong></a></p><p>
+
+The input to the algorithm will be a plane triangulation G with n vertices.
+(This is without loss of generality, as any planar graph can be triangulated
+in linear time.)
+The output will be a coloring of the vertices of G with four colors.
+</p><p>
+If G has at most four vertices color each vertex a different color.
+Otherwise if G has a vertex x of degree k &lt; 5, then the circuit C surrounding it is a `k-ring'.
+Go to the k-ring analysis below.
+Otherwise G has minimum degree five.
+For every vertex we compute its charge as explained above, and find
+a vertex v of positive charge. It follows from our proof of Theorem 2 that
+either a good configuration appears in the second neighborhood of v
+(it which case it can be found in linear time), or a k-ring violating
+the definition of internal 6-connection can be found in linear time.
+In the latter case we go to the k-ring analysis below, in the former case
+we apply recursion to a certain smaller graph. A four-coloring of G can then
+be constructed from the four-coloring of this smaller graph in linear time.
+</p><p>
+Given a k-ring R violating the definition of internal 6-connection
+ a procedure developed by Birkhoff can be used. We apply recursion
+to two carefully selected subgraphs of G. A four-coloring of G can 
+then be constructed from the four-colorings of the two smaller graphs in
+linear time.
+
+
+</p><p><a name="Discussion"><strong>Discussion.</strong></a></p><p>
+
+We should mention  that both our programs use only integer
+arithmetic, and so we need not be concerned with round-off errors
+and similar dangers of floating point arithmetic.
+However, an argument can be made that our `proof' is not a proof in
+the traditional sense, because it contains steps that can never be
+verified by humans. In particular, we have not proved the
+correctness of the compiler
+we compiled our programs on, nor have we proved the infallibility of the
+hardware we ran our programs on. These
+have to be taken on faith, and are conceivably a source of error.
+However, from a practical point of view,
+the chance of a computer error that appears consistently
+in exactly the same way on all runs of our programs on all the compilers
+under all the operating systems that  our programs run on is
+infinitesimally small compared to the chance of a human
+error during the same amount of case-checking. Apart from
+this hypothetical possibility of a computer consistently giving
+an incorrect answer, the rest of our proof can be verified in the
+same way as traditional mathematical proofs. We concede, however, that
+verifying a computer program is much more difficult than checking
+a mathematical proof of the same length.
+
+</p><p><strong>Acknowledgements.</strong></p><p>
+
+We are indebted to Thomas Fowler, Christopher Carl Heckman and
+Barrett Walls for their help with preparing this page.
+Our work was partially supported by the National Science Foundation.
+
+</p><p><a name="References"><strong>References.</strong></a></p><p>
+</p><ol>
+<li> K. Appel and W. Haken, Every planar map is four colorable.
+Part I.
+Discharging, Illinois J. Math. 21 (1977), 429-490.
+</li><li> K. Appel, W. Haken and J. Koch, Every planar map is four colorable.
+Part II. Reducibility, Illinois J. Math.  21 (1977), 491--567.
+</li><li> K. Appel and W. Haken, Every planar map is four colorable,
+Contemporary Math. 98 (1989).
+</li><li> G. D. Birkhoff, The reducibility of maps, Amer. J. Math. 35 (1913),
+114-128.
+</li><li> H. Heesch, Untersuchungen zum Vierfarbenproblem, Hochschulskriptum
+810/a/b, Bibliographisches Institut, Mannheim 1969.
+</li><li> A. B. Kempe, On the geographical problem of the four
+colors, Amer. J. Math., 2 (1879), 193-200.
+</li><li>N. Robertson, D. P. Sanders, P. D. Seymour and R. Thomas,
+The four colour theorem, J. Combin. Theory Ser. B. 70 (1997), 2-44.
+</li><li>N. Robertson, D. P. Sanders, P. D. Seymour and R. Thomas,
+<a href="http://people.math.gatech.edu/~thomas/PAP/npfc.pdf">
+A new proof of the four colour theorem</a>, 
+<a href="http://www.ams.org/journals/era/1996-02-01/">
+Electron. Res. Announc. Amer. Math. Soc. 2 (1996), 17-25 (electronic).</a>
+</li><li> T.L. Saaty, Thirteen colorful variations on Guthrie's four-color
+conjecture, Amer. Math. Monthly 79 (1972), 2-43.
+</li><li> T.L. Saaty and P. C. Kainen, The four-color problem. Assaults and
+conquest, Dover Publications, New York 1986.
+</li><li>P. G. Tait, Note on a theorem in geometry of position, Trans.
+Roy. Soc. Edinburgh 29 (1880), 657-660.
+</li><li>H. Whitney and W. T. Tutte, Kempe chains and the four colour problem'',
+in Studies in Graph Theory, Part II (ed. D. R. Fulkerson), Math. Assoc. of
+America, 1975, 378-413.
+</li></ol>
+
+<p></p><hr><p>13 November 1995. Links updated 19 July 2017.</p>
+Translations: 
+<a href="http://www.autoersatzteile.de/blog/der-vier-farb-satz">German</a>,
+<!--
+<a href="http://blog.1800flowers.com/international/fourcolor-be/">Belorussian</a>,
+<a href="http://cegroni.com/edu/cetiri-boje-teorem/">Croatian</a>.
+-->
+<a href="http://webhostinggeeks.com/science/thomas-fourcolor-ro">Romanian</a>,
+<a href="http://myscres.com/articles/fourcolor.html">Spanish</a> 
+courtesy of <a href="http://myscres.com/">Translate Team</a>,
+<a href="http://more-sky.com/four-colors/">Greek</a> courtesy
+of Dimitris Galatas.
+<br><b>Note to potential translators:</b>
+Please do not ask me to link to your translation.
+I am receiving too many requests. Most of them are computer-generated 
+and/or of low quality.
+
+
+</body></html>
